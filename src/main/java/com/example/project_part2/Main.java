@@ -1,0 +1,171 @@
+package com.example.project_part2;
+import com.example.project_part2.POST.*;
+import com.example.project_part2.USER.*;
+import com.example.project_part2.DataBaseController.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class Main extends Application {
+    static Main main1=new Main();
+    public static Stage mainstage;
+    public static Scanner scanner = new Scanner(System.in);
+    @Override
+    public  void start(Stage stage) throws IOException {
+        mainstage=stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        stage.setTitle("OWL");
+        stage.getIcons().add(new Image("C:\\Users\\season\\Desktop\\Projrct\\last\\java-project-part2-main\\src\\main\\resources\\com\\example\\project_part2\\icon\\AppIcon.png"));
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
+    public static void createaccountSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("CreateNewAccount.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Create New Account");
+        mainstage.setScene(scene);
+       // mainstage.show();
+    }
+
+    public static void passwordrecovSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("passrec.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Password recovery");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void loginSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Login");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void CreateBUSpostSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("createbuspost.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Create Post");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void CreateORDpostSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("createordpost.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Create Post");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void personalpageSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("personalpage.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("OWL");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void suggestSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("suggestion.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("OWL");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void MyinfoSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("completeMyinfo.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Complete/Edit information");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void AddStorySTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("createStory.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Add new story");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void ViewuserSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("viewuser.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle(PersonalHomepage.USER.UserName);
+        mainstage.setScene(scene);
+    }
+
+    public static void ViewuserPrivateSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("viewuserprivate.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle(PersonalHomepage.USER.UserName);
+        mainstage.setScene(scene);
+    }
+
+    public static void ViewOtheruserSTART() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("viewotherusers.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle(ViewOtherUsers.ThisUser.UserName);
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void ShowPostFXMLStart(Post post,User user) throws IOException {
+        ShowPostFXML.post=post;
+        ShowPostFXML.Viewer=user;
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("showPostFXML.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Show Post of : "+post.PosterName);
+
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+
+    public static void ChatAndPvsStart(User user) throws IOException,SQLException{
+        ChatAndPvs.Viewer=user;
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("chatAndPvs.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        mainstage.setTitle("Chat And Pvs");
+        mainstage.setScene(scene);
+        // mainstage.show();
+    }
+    public static void NewGroup(Group group,boolean New,User Viewer){
+        NewGroup.myGroup=group;
+        NewGroup.Viewer=Viewer;
+        NewGroup.New=New;
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("newGroup.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 1280, 680);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (New){
+            mainstage.setTitle("New Group");
+        }
+        else {
+            mainstage.setTitle("Edit Group");
+        }
+        mainstage.setScene(scene);
+
+    }
+
+    public static void main(String[] args)throws SQLException {
+        MAINInformation.mainInformation.UpdateMainInfo();
+       //SignIn.signIn.start();
+        launch();
+    }
+
+}
