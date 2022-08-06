@@ -13,6 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
 public class DMHandler {
     DirectMassage directMassage;
     AnchorPane myPane;
@@ -20,7 +23,9 @@ public class DMHandler {
     ImageView Profile,myBack;
     Label label=new Label();
     User Viewer;
-    DMHandler(DirectMassage _directMassage, AnchorPane anchorPane,User user,double X,double Y){
+    boolean ForSearch;
+    DMHandler(DirectMassage _directMassage, AnchorPane anchorPane,User user,double X,double Y,boolean forSearch){
+        ForSearch=forSearch;
         directMassage=_directMassage;
         Viewer=user;
         myPane=anchorPane;
@@ -32,7 +37,12 @@ public class DMHandler {
             @Override
             public void handle(ActionEvent actionEvent) {
                 System.out.println("open chat");
-                OpenChatMethod();
+                if (forSearch){
+                      SearchMethod();
+                }
+                else {
+                      OpenChatMethod();
+                }
             }
         });
     }
@@ -45,6 +55,7 @@ public class DMHandler {
             Profile=new ImageView(image);
         }
         else {
+            if (!ForSearch){
             directMassage.UserNamesInChat.remove(Viewer.UserName);
             label.setText(directMassage.UserNamesInChat.get(0));
             directMassage.UserNamesInChat.add(Viewer.UserName);
@@ -52,6 +63,14 @@ public class DMHandler {
             Image image=new Image(MAINInformation.mainInformation.users.get(label.getText()).profilepicpath);
             image=getRoundedImage(image,200);
             Profile=new ImageView(image);
+            }
+            else {
+                label.setText(directMassage.UserNamesInChat.get(0));
+                myBack=new ImageView(new Image("C:\\Users\\season\\Desktop\\Projrct\\last\\java-project-part2-main\\src\\main\\resources\\com\\example\\project_part2\\icon\\PVBack.png"));
+                Image image=new Image(MAINInformation.mainInformation.users.get(label.getText()).profilepicpath);
+                image=getRoundedImage(image,200);
+                Profile=new ImageView(image);
+            }
         }
         OpenChat.setText("      ");
         OpenChat.setFont(Font.font(24));
@@ -85,6 +104,29 @@ public class DMHandler {
     }
     void OpenChatMethod(){
         ChatAndPvs.OpenDirectMassage(this.directMassage,Viewer);
+    }
+    void SearchMethod()
+    {
+        if (!directMassage.isGroup){
+        try {
+            DirectMassage.NewDirectMassage(Viewer.UserName,directMassage.UserNamesInChat.get(0));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        }
+        else {
+            try {
+                ((Group)directMassage).addMember(Viewer.UserName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Main.ChatAndPvsStart(Viewer);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
     public static Image getRoundedImage(Image image, double radius) {
         Circle clip = new Circle(image.getWidth() / 2, image.getHeight() / 2, radius);

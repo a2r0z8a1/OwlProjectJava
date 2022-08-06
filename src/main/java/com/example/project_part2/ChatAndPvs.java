@@ -1,12 +1,20 @@
 package com.example.project_part2;
 
+import com.example.project_part2.USER.OrdinaryUser;
 import com.example.project_part2.USER.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,7 +25,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChatAndPvs implements Initializable {
-
+    @FXML
+     Button EditButton;
+    @FXML
+    Pane MainPane;
     public static DirectMassage MydirectMassage=null;
 
     public static List<DMHandler> dmHandlers;
@@ -27,8 +38,10 @@ public class ChatAndPvs implements Initializable {
     private TextArea CommentArea;
 
     @FXML
-    private AnchorPane ChatAndPvsAnchor;
+    private AnchorPane ChatAndPvsAnchor,SearchAnchor;
 
+    @FXML
+    private TextField searchField;
     @FXML
     private AnchorPane MassagesAnchor;
 
@@ -50,7 +63,41 @@ public class ChatAndPvs implements Initializable {
                 UpdateComment();
             }
         }
-
+        if (MydirectMassage!=null){
+            if (MydirectMassage.isGroup){
+                EditButton.setVisible(true);
+                ImageView my= new ImageView(DMHandler.getRoundedImage(new Image(((Group)MydirectMassage).ProfilePath),200));
+                my.setTranslateY(30);
+                my.setTranslateX(450);
+                my.setFitWidth(50);
+                my.setFitHeight(50);
+                Label L=new Label((((Group) MydirectMassage).GroupID));
+                L.setTranslateY(40);
+                L.setTranslateX(520);
+                L.setFont(new Font(20));
+                MainPane.getChildren().add(L);
+                MainPane.getChildren().add(my);
+            }
+            else {
+                EditButton.setVisible(false);
+                MydirectMassage.UserNamesInChat.remove(Viewer.UserName);
+                ImageView my= new ImageView(DMHandler.getRoundedImage(new Image(MAINInformation.mainInformation.users.get(MydirectMassage.UserNamesInChat.get(0)).profilepicpath),200));
+                Label L=new Label(MydirectMassage.UserNamesInChat.get(0));
+                MydirectMassage.UserNamesInChat.add(Viewer.UserName);
+                my.setTranslateY(30);
+                my.setTranslateX(450);
+                my.setFitWidth(50);
+                my.setFitHeight(50);
+                L.setTranslateY(40);
+                L.setTranslateX(520);
+                L.setFont(new Font(20));
+                MainPane.getChildren().add(L);
+                MainPane.getChildren().add(my);
+            }
+        }
+        else {
+            EditButton.setVisible(false);
+        }
     }
 
     void LoadDms(){
@@ -58,7 +105,7 @@ public class ChatAndPvs implements Initializable {
         dmHandlers=new ArrayList<>();
         double Y=5;
         for (String i:Viewer.DirectMassageCodes){
-            dmHandlers.add(new DMHandler(MAINInformation.mainInformation.directmassages.get(i),ChatAndPvsAnchor,Viewer,5,Y));
+            dmHandlers.add(new DMHandler(MAINInformation.mainInformation.directmassages.get(i),ChatAndPvsAnchor,Viewer,5,Y,false));
             Y+=100;
         }
         ChatAndPvsAnchor.setPrefHeight(Y+50);
@@ -112,6 +159,40 @@ public class ChatAndPvs implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    void SearchGroup(){
+        String STR=searchField.getText();
+        SearchAnchor.getChildren().clear();
+        List<DMHandler> dmHandlers=new ArrayList<>();
+        double X=5;
+        double Y=5;
+        for (User i:MAINInformation.mainInformation.users.values()){
+            if (i.UserName.contains(STR)){
+                boolean k;
+                if (i.Kind){
+                    k=true;
+                }
+                else {
+                    k=!((OrdinaryUser)i).Private;
+                }
+                if (((Viewer.FollowingsList.contains(i.UserName)||k))&&!Viewer.getDMsList().contains(i.UserName)){
+                    dmHandlers.add(new DMHandler(new DirectMassage(i.UserName),SearchAnchor,Viewer,X,Y,true));
+                    Y+=100;
+                }
+            }
+        }
+        for (DirectMassage i:MAINInformation.mainInformation.directmassages.values()){
+
+            if (i.isGroup){
+                if (!((Group)i).IsPrivate&&!Viewer.DirectMassageCodes.contains(i.Code)&&((Group) i).GroupID.contains(searchField.getText())){
+                    dmHandlers.add(new DMHandler(i,SearchAnchor,Viewer,X,Y,true));
+                    Y+=100;
+                }
+            }
+        }
+        SearchAnchor.setPrefHeight(Y+50);
     }
 
     @FXML

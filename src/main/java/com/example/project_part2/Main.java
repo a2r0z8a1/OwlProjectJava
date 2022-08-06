@@ -136,7 +136,7 @@ public class Main extends Application {
     public static void ChatAndPvsStart(User user) throws IOException,SQLException{
         ChatAndPvs.Viewer=user;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("chatAndPvs.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1280, 680);
+        Scene scene = new Scene(fxmlLoader.load(), 1300, 680);
         mainstage.setTitle("Chat And Pvs");
         mainstage.setScene(scene);
         // mainstage.show();

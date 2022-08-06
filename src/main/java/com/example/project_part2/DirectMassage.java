@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.List;
 public class DirectMassage {
     public DirectMassage(){}
+    public DirectMassage(String User1){
+        UserNamesInChat.add(User1);
+    }
     DirectMassage(String User1,String User2) throws SQLException {
         UserNamesInChat.add(User1);
         UserNamesInChat.add(User2);
